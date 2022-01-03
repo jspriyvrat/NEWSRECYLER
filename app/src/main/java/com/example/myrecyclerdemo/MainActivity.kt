@@ -3,6 +3,8 @@ package com.example.myrecyclerdemo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myrecyclerdemo.NewsInterface.NewsService.newsInstance
@@ -18,17 +20,17 @@ lateinit var recyler:RecyclerView
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyler=findViewById(R.id.myRecycler)
-        Log.d("kok","laun")
+
         getNews()
-        Log.d("Mocker","method ended ")
+
     }
 
     private fun getNews() {
-        val  news =newsInstance.getHeadLines("in",1)
+        val  news =newsInstance.getHeadLines("ae",1)
         news.enqueue(object:Callback<News>{
             override fun onResponse(call: Call<News>, response: Response<News>) {
             val news=response.body()
-             Log.d("ppp", news.toString())
+
                 if (news != null) {
                      adapter = NewsAdapter(this@MainActivity, news.articles)
                     recyler.adapter=adapter
@@ -37,7 +39,8 @@ lateinit var recyler:RecyclerView
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
-                Log.d("jjj","News is successfully fetched",t)
+                Toast.makeText(application,"Error in fetching the news ",Toast.LENGTH_LONG).show()
+                
             }
         })
     }
